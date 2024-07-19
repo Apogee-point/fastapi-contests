@@ -1,0 +1,1 @@
+az webapp create --resource-group web-app-simple-rg --plan webplan --name webappsimple123 --docker-registry-server-password $ACR_PASSWORD --docker-registry-server-user webappfast321 --role acrpull --deployment-container-image-name webappfast321.azurecr.io/webappsimple:latest
