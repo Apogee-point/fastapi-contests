@@ -1,1 +1,20 @@
 az webapp create --resource-group web-app-simple-rg --plan webplan --name webappsimple123 --docker-registry-server-password $ACR_PASSWORD --docker-registry-server-user webappfast321 --role acrpull --deployment-container-image-name webappfast321.azurecr.io/webappsimple:latest
+# Choose our version of Python
+FROM python:3.9
+
+# Set up a working directory
+WORKDIR /code
+
+# Copy just the requirements into the working directory so it gets cached by itself
+COPY ./requirements.txt /code/requirements.txt
+
+# Install the dependencies from the requirements file
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+
+# Copy the code into the working directory
+COPY . /code/app
+
+EXPOSE 80
+
+# Tell uvicorn to start spin up our code, which will be running inside the container now
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
